@@ -1,4 +1,10 @@
+# 문서 군집화
+## nnf
+## kmean
+## LDA
+## LSI
 
+<https://github.com/brenden17/clustring-docs>
 
 ## Reference
 * http://archives.knowhow.or.kr/archives/index.php?bId=437&speechId=747
