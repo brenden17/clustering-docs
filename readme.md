@@ -2,7 +2,7 @@
 ## nnf
 ## kmean
 ## LDA
-## LSI
+### LSI
 
 <https://github.com/brenden17/clustring-docs>
 
