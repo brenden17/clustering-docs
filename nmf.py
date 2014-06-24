@@ -1,3 +1,5 @@
+from glob import glob
+
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 from sklearn import decomposition
@@ -9,43 +11,36 @@ def file2list(filename):
     return rawdata
 
 def init_data():
-    files = ['./data/no1_noun.txt',
-                './data/no2_noun.txt',
-                './data/no3_noun.txt',
-                './data/park1_noun.txt',
-                './data/park2_noun.txt',
-                './data/park3_noun.txt',
-                ]
+    target = './immidata/modata/93chosun/*.txt'
+    files = glob(target)
     return map(file2list, files)
 
-def get_tfidf(data):
-    vectorizer = CountVectorizer(max_df=10, min_df=2)
-    counts = vectorizer.fit_transform(data)
-    #print counts.shape, counts.toarray()
-    return TfidfTransformer().fit_transform(counts)
-
-def decompose_by_nnf(debug=True):
+def decompose_by_nmf(debug=True):
     initdata = init_data()
 
-    vectorizer = CountVectorizer(max_df=10, min_df=2)
+    vectorizer = CountVectorizer(max_df=20, min_df=9)
     counts = vectorizer.fit_transform(initdata)
     tfidf =  TfidfTransformer().fit_transform(counts)
 
-    nmf = decomposition.NMF(n_components=3).fit(tfidf)
-    feature_names = vectorizer.get_feature_names()
+    for i in range(2, 7):
+        nmf = decomposition.NMF(n_components=i).fit(tfidf)
+        feature_names = vectorizer.get_feature_names()
 
-    if debug:
-        for topic_idx, topic in enumerate(nmf.components_):
-            print "Topic #%d:" % topic_idx
-            #print " ".join([str(i) for i in topic.argsort()[:-100:-1]])
-            print " ".join([feature_names[i] for i in topic.argsort()[:-100:-1]])
+        print "features %d" % (i, )
+        if debug:
+            for topic_idx, topic in enumerate(nmf.components_):
+                print "Topic #%d:" % topic_idx
+                #print " ".join([str(i) for i in topic.argsort()[:-100:-1]])
+                print " ".join([feature_names[i] for i in topic.argsort()[:-100:-1]])
 
-    print euclidean_distances(nmf.components_, tfidf[0,:])
-    print euclidean_distances(nmf.components_, tfidf[1,:])
-    print euclidean_distances(nmf.components_, tfidf[2,:])
-    print euclidean_distances(nmf.components_, tfidf[3,:])
-    print euclidean_distances(nmf.components_, tfidf[4,:])
-    print euclidean_distances(nmf.components_, tfidf[5,:])
+    """
+        print euclidean_distances(nmf.components_, tfidf[0,:])
+        print euclidean_distances(nmf.components_, tfidf[1,:])
+        print euclidean_distances(nmf.components_, tfidf[2,:])
+        print euclidean_distances(nmf.components_, tfidf[3,:])
+        print euclidean_distances(nmf.components_, tfidf[4,:])
+        print euclidean_distances(nmf.components_, tfidf[5,:])
+    """
 
 if __name__ == '__main__':
-    decompose_by_nnf()
+    decompose_by_nmf()
