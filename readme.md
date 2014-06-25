@@ -1,5 +1,5 @@
 # 문서 군집화
-## nnf
+## nmf
 ## kmean
 ## LDA
 ### LSI
